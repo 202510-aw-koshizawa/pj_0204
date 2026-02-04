@@ -15,8 +15,9 @@ public class TodoController {
 
     // ToDo新規作成画面を表示する。
     @GetMapping("/todos/new")
-    public String createForm() {
-        return "todo/new";
+    public String createForm(Model model) {
+        model.addAttribute("todoForm", new TodoForm());
+        return "todo/form";
     }
 
     // 指定したIDのToDo詳細画面を表示する。
@@ -24,4 +25,13 @@ public class TodoController {
     public String detail(@PathVariable Long id) {
         return "todo/detail";
     }
+
+    // フォーム送信内容を受け取り、確認画面へ遷移する。
+    @PostMapping("/todos/confirm")
+    public String confirm(@ModelAttribute TodoForm todoForm, Model model) {
+        model.addAttribute("todoForm", todoForm);
+        return "todo/confirm";
+    }
 }
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
