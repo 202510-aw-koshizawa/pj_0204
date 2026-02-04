@@ -11,9 +11,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class TodoController {
 
+    private final TodoService todoService;
+
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
+    }
+
     // ToDo一覧画面を表示する。
     @GetMapping("/todos")
-    public String list() {
+    public String list(Model model) {
+        model.addAttribute("todos", todoService.findAll());
         return "todo/list";
     }
 
@@ -55,16 +62,11 @@ public class TodoController {
         return "redirect:/todos/new";
     }
 
-    // 確認画面から完了画面へ遷移する。
+    // 確認画面から登録し、一覧画面へ遷移する。
     @PostMapping("/todos/complete")
     public String complete(@ModelAttribute TodoForm todoForm, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("todoForm", todoForm);
-        return "redirect:/todos/complete";
-    }
-
-    // 完了画面を表示する。
-    @GetMapping("/todos/complete")
-    public String completeView() {
-        return "todo/complete";
+        todoService.createFromForm(todoForm);
+        redirectAttributes.addFlashAttribute("message", "登録が完了しました");
+        return "redirect:/todos";
     }
 }

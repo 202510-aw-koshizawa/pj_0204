@@ -14,6 +14,7 @@
   </header>
 
   <main class="container py-4">
+    <div th:if="${message}" class="alert alert-success" th:text="${message}">登録が完了しました</div>
     <div class="d-flex justify-content-end mb-3">
       <a class="btn btn-primary" th:href="@{/todos/new}">新規作成</a>
     </div>
