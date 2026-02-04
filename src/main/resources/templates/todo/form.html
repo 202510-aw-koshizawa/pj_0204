@@ -18,7 +18,9 @@
       <a class="btn btn-outline-secondary" th:href="@{/todos}">戻る</a>
     </div>
 
-    <form th:action="@{/todos/confirm}" th:object="${todoForm}" method="post" class="card">
+    <form th:action="${editId != null} ? @{/todos/{id}/update(id=${editId})} : @{/todos/confirm}"
+          th:object="${todoForm}" method="post" class="card">
+      <input type="hidden" th:field="*{version}">
       <div class="card-body">
         <div class="mb-3">
           <label for="title" class="form-label">タイトル</label>

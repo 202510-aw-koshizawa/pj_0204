@@ -33,7 +33,18 @@ public class TodoService {
         form.setDescription(todo.getDescription());
         form.setDueDate(todo.getDueDate());
         form.setPriority(todo.getPriority());
+        form.setVersion(todo.getVersion());
         return form;
+    }
+
+    public void updateFromForm(Long id, TodoForm form) {
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException(id));
+        todo.setTitle(form.getTitle());
+        todo.setDescription(form.getDescription());
+        todo.setDueDate(form.getDueDate());
+        todo.setPriority(form.getPriority());
+        todo.setVersion(form.getVersion());
+        todoRepository.save(todo);
     }
 
     public void deleteById(Long id) {

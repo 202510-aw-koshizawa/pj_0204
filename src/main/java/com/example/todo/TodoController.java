@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.validation.BindingResult;
+import jakarta.validation.Valid;
 
 @Controller
 public class TodoController {
@@ -43,7 +45,24 @@ public class TodoController {
     @GetMapping("/todos/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
         model.addAttribute("todoForm", todoService.getFormById(id));
+        model.addAttribute("editId", id);
         return "todo/form";
+    }
+
+    // ToDoを更新し、一覧画面へ遷移する。
+    @PostMapping("/todos/{id}/update")
+    public String update(@PathVariable Long id,
+                         @Valid @ModelAttribute("todoForm") TodoForm todoForm,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes,
+                         Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("editId", id);
+            return "todo/form";
+        }
+        todoService.updateFromForm(id, todoForm);
+        redirectAttributes.addFlashAttribute("message", "更新が完了しました");
+        return "redirect:/todos";
     }
 
     // フォーム送信内容を受け取り、確認画面へリダイレクトする。
