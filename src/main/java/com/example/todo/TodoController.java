@@ -16,12 +16,12 @@ public class TodoController {
     // ToDo新規作成画面を表示する。
     @GetMapping("/todos/new")
     public String createForm() {
-        return "todos/new";
+        return "todo/new";
     }
 
     // 指定したIDのToDo詳細画面を表示する。
     @GetMapping("/todos/{id}")
     public String detail(@PathVariable Long id) {
-        return "todos/detail";
+        return "todo/detail";
     }
 }
