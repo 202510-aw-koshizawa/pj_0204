@@ -69,4 +69,16 @@ public class TodoController {
         redirectAttributes.addFlashAttribute("message", "登録が完了しました");
         return "redirect:/todos";
     }
+
+    // ToDoを削除し、一覧画面へ遷移する。
+    @PostMapping("/todos/{id}/delete")
+    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            todoService.deleteById(id);
+            redirectAttributes.addFlashAttribute("message", "削除が完了しました");
+        } catch (TodoNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("error", "指定したToDoが見つかりません");
+        }
+        return "redirect:/todos";
+    }
 }

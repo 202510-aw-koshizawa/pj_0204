@@ -25,4 +25,11 @@ public class TodoService {
         todo.setPriority(form.getPriority());
         return todoRepository.save(todo);
     }
+
+    public void deleteById(Long id) {
+        if (!todoRepository.existsById(id)) {
+            throw new TodoNotFoundException(id);
+        }
+        todoRepository.deleteById(id);
+    }
 }
