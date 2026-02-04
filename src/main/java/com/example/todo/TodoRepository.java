@@ -21,6 +21,9 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     // 優先度で昇順ソート
     List<Todo> findAllByOrderByPriorityAsc();
 
+    // 作成日時の新しい順でソート
+    List<Todo> findAllByOrderByCreatedAtDesc();
+
     // @Queryの例: 完了かつ期限日が今日以前
     @Query("select t from Todo t where t.completed = :completed and t.dueDate <= :date")
     List<Todo> findCompletedAndDueDateBefore(@Param("completed") boolean completed, @Param("date") LocalDate date);

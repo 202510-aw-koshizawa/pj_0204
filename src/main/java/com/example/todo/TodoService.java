@@ -14,7 +14,7 @@ public class TodoService {
     }
 
     public List<Todo> findAll() {
-        return todoRepository.findAllByOrderByPriorityAsc();
+        return todoRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public Todo createFromForm(TodoForm form) {
