@@ -39,6 +39,13 @@ public class TodoController {
         return "todo/detail";
     }
 
+    // 指定したIDのToDo編集画面を表示する。
+    @GetMapping("/todos/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
+        model.addAttribute("todoForm", todoService.getFormById(id));
+        return "todo/form";
+    }
+
     // フォーム送信内容を受け取り、確認画面へリダイレクトする。
     @PostMapping("/todos/confirm")
     public String confirm(@ModelAttribute TodoForm todoForm, RedirectAttributes redirectAttributes) {

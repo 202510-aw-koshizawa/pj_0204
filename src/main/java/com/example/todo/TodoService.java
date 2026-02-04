@@ -26,6 +26,16 @@ public class TodoService {
         return todoRepository.save(todo);
     }
 
+    public TodoForm getFormById(Long id) {
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException(id));
+        TodoForm form = new TodoForm();
+        form.setTitle(todo.getTitle());
+        form.setDescription(todo.getDescription());
+        form.setDueDate(todo.getDueDate());
+        form.setPriority(todo.getPriority());
+        return form;
+    }
+
     public void deleteById(Long id) {
         if (!todoRepository.existsById(id)) {
             throw new TodoNotFoundException(id);
