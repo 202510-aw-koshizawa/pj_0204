@@ -10,7 +10,7 @@ public class TodoController {
     // ToDo一覧画面を表示する。
     @GetMapping("/todos")
     public String list() {
-        return "todos/list";
+        return "todo/list";
     }
 
     // ToDo新規作成画面を表示する。
