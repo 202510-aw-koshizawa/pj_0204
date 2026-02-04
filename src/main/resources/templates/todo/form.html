@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ToDo新規作成</title>
+  <title th:text="${editId != null} ? 'ToDo編集' : 'ToDo新規作成'">ToDo新規作成</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
   <header class="bg-white border-bottom">
     <div class="container py-3">
-      <h1 class="h3 mb-0">ToDo新規作成</h1>
+      <h1 class="h3 mb-0" th:text="${editId != null} ? 'ToDo編集' : 'ToDo新規作成'">ToDo新規作成</h1>
     </div>
   </header>
 
@@ -22,27 +22,35 @@
           th:object="${todoForm}" method="post" class="card">
       <input type="hidden" th:field="*{version}">
       <div class="card-body">
+        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+          入力内容にエラーがあります。修正してください。
+        </div>
+
         <div class="mb-3">
           <label for="title" class="form-label">タイトル</label>
           <input id="title" type="text" class="form-control" th:field="*{title}">
+          <div class="text-danger small mt-1" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
         </div>
 
         <div class="mb-3">
           <label for="description" class="form-label">説明</label>
           <textarea id="description" class="form-control" rows="4" th:field="*{description}"></textarea>
+          <div class="text-danger small mt-1" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
         </div>
 
         <div class="mb-3">
           <label for="dueDate" class="form-label">期限日</label>
           <input id="dueDate" type="date" class="form-control" th:field="*{dueDate}">
+          <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dueDate')}" th:errors="*{dueDate}"></div>
         </div>
 
         <div class="mb-3">
           <label for="priority" class="form-label">優先度</label>
           <input id="priority" type="number" class="form-control" min="1" max="5" th:field="*{priority}">
+          <div class="text-danger small mt-1" th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}"></div>
         </div>
 
-        <button type="submit" class="btn btn-primary">確認へ進む</button>
+        <button type="submit" class="btn btn-primary" th:text="${editId != null} ? '更新する' : '確認へ進む'">確認へ進む</button>
       </div>
     </form>
   </main>
