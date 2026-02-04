@@ -14,10 +14,6 @@
   </header>
 
   <main class="container py-4">
-    <div class="mb-3">
-      <a class="btn btn-outline-secondary" th:href="@{/todos/new}">戻る</a>
-    </div>
-
     <div class="card">
       <div class="card-body">
         <dl class="row mb-0">
@@ -34,6 +30,23 @@
           <dd class="col-sm-9" th:text="${todoForm.priority}">3</dd>
         </dl>
       </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+      <form th:action="@{/todos/back}" method="post">
+        <input type="hidden" name="title" th:value="${todoForm.title}">
+        <input type="hidden" name="description" th:value="${todoForm.description}">
+        <input type="hidden" name="dueDate" th:value="${todoForm.dueDate}">
+        <input type="hidden" name="priority" th:value="${todoForm.priority}">
+        <button type="submit" class="btn btn-outline-secondary">戻る</button>
+      </form>
+      <form th:action="@{/todos/complete}" method="post">
+        <input type="hidden" name="title" th:value="${todoForm.title}">
+        <input type="hidden" name="description" th:value="${todoForm.description}">
+        <input type="hidden" name="dueDate" th:value="${todoForm.dueDate}">
+        <input type="hidden" name="priority" th:value="${todoForm.priority}">
+        <button type="submit" class="btn btn-primary">登録</button>
+      </form>
     </div>
   </main>
 </body>
