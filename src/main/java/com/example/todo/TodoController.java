@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.validation.BindingResult;
+import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 
 @Controller
@@ -62,6 +63,23 @@ public class TodoController {
         }
         todoService.updateFromForm(id, todoForm);
         redirectAttributes.addFlashAttribute("message", "更新が完了しました");
+        return "redirect:/todos";
+    }
+
+    // 完了状態を反転する（同期/非同期で共通）。
+    @PostMapping("/todos/{id}/toggle")
+    public Object toggle(@PathVariable Long id,
+                         RedirectAttributes redirectAttributes,
+                         jakarta.servlet.http.HttpServletRequest request) {
+        boolean completed = todoService.toggleCompleted(id);
+
+        String requestedWith = request.getHeader("X-Requested-With");
+        if ("XMLHttpRequest".equalsIgnoreCase(requestedWith)) {
+            return ResponseEntity.ok().body(java.util.Map.of("completed", completed));
+        }
+
+        redirectAttributes.addFlashAttribute("message",
+                completed ? "ToDoを完了にしました" : "ToDoを未完了に戻しました");
         return "redirect:/todos";
     }
 

@@ -47,6 +47,14 @@ public class TodoService {
         todoRepository.save(todo);
     }
 
+    public boolean toggleCompleted(Long id) {
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException(id));
+        boolean next = !Boolean.TRUE.equals(todo.getCompleted());
+        todo.setCompleted(next);
+        todoRepository.save(todo);
+        return next;
+    }
+
     public void deleteById(Long id) {
         if (!todoRepository.existsById(id)) {
             throw new TodoNotFoundException(id);

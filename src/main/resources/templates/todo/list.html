@@ -49,15 +49,21 @@
         </thead>
         <tbody>
           <tr th:each="todo : ${todos}">
-            <td th:text="${todo.title}">サンプルToDo</td>
+            <td th:text="${todo.title}"
+                th:classappend="${todo.completed} ? 'text-decoration-line-through text-muted' : ''">サンプルToDo</td>
             <td th:text="${todo.dueDate != null ? #temporals.format(todo.dueDate, 'yyyy/MM/dd') : '-'}"
                 th:classappend="${todo.dueDate != null and todo.dueDate.isBefore(T(java.time.LocalDate).now())} ? 'text-danger fw-semibold' : ''">
               2026/02/04
             </td>
             <td th:text="${#strings.repeat('★', (todo.priority != null ? todo.priority : 1))}">★</td>
             <td>
-              <i class="bi bi-check-circle-fill text-success" th:if="${todo.completed}"></i>
-              <i class="bi bi-circle text-secondary" th:unless="${todo.completed}"></i>
+              <!-- 同期: JSが無い場合はフォーム送信で切り替え -->
+              <form th:action="@{/todos/{id}/toggle(id=${todo.id})}" method="post" class="d-inline">
+                <input class="form-check-input js-toggle"
+                       type="checkbox"
+                       th:checked="${todo.completed}"
+                       th:attr="data-url=@{/todos/{id}/toggle(id=${todo.id})}">
+              </form>
               <span class="visually-hidden" th:text="${todo.completed ? '完了' : '未完了'}">未完了</span>
             </td>
             <td class="text-end">
@@ -92,6 +98,46 @@
         }, 300);
       });
     }, 3000);
+  </script>
+
+  <script>
+    // 非同期: checkboxクリックでページ遷移なしに更新
+    document.querySelectorAll('.js-toggle').forEach(function (checkbox) {
+      checkbox.addEventListener('change', function (e) {
+        var url = checkbox.getAttribute('data-url');
+        if (!url) return;
+        fetch(url, {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(function (res) {
+          if (!res.ok) throw new Error('toggle failed');
+          return res.json();
+        }).then(function (data) {
+          var row = checkbox.closest('tr');
+          if (!row) return;
+          var title = row.querySelector('td');
+          if (title) {
+            if (data.completed) {
+              title.classList.add('text-decoration-line-through', 'text-muted');
+            } else {
+              title.classList.remove('text-decoration-line-through', 'text-muted');
+            }
+          }
+        }).catch(function () {
+          // 失敗時は元に戻す
+          checkbox.checked = !checkbox.checked;
+        });
+      });
+    });
+
+    // JSが無い場合は通常送信になるよう補助
+    document.querySelectorAll('.js-toggle').forEach(function (checkbox) {
+      var form = checkbox.closest('form');
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+      });
+    });
   </script>
 </body>
 </html>
