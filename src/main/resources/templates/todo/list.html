@@ -15,8 +15,12 @@
   </header>
 
   <main class="container py-4">
-    <div th:if="${message}" class="alert alert-success" th:text="${message}">登録が完了しました</div>
-    <div th:if="${error}" class="alert alert-danger" th:text="${error}">エラーが発生しました</div>
+    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <span th:text="${message}">完了メッセージ</span>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <span th:text="${error}">エラーメッセージ</span>
+    </div>
     <div class="d-flex justify-content-end mb-3">
       <a class="btn btn-primary" th:href="@{/todos/new}">新規作成</a>
     </div>
@@ -75,5 +79,19 @@
       <small class="text-muted">ToDo App</small>
     </div>
   </footer>
+
+  <script>
+    window.setTimeout(function () {
+      document.querySelectorAll('.alert').forEach(function (el) {
+        el.classList.remove('show');
+        el.classList.add('hide');
+        window.setTimeout(function () {
+          if (el.parentNode) {
+            el.parentNode.removeChild(el);
+          }
+        }, 300);
+      });
+    }, 3000);
+  </script>
 </body>
 </html>
