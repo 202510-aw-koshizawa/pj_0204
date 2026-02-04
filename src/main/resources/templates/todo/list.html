@@ -33,7 +33,7 @@
           <tr th:each="todo : ${todos}">
             <td th:text="${todo.id}">1</td>
             <td th:text="${todo.title}">サンプルToDo</td>
-            <td th:text="${todo.status}">TODO</td>
+            <td th:text="${todo.completed ? '完了' : '未完了'}">未完了</td>
             <td class="text-end">
               <a class="btn btn-sm btn-outline-secondary" th:href="@{/todos/{id}(id=${todo.id})}">詳細</a>
               <a class="btn btn-sm btn-outline-primary" th:href="@{/todos/{id}/edit(id=${todo.id})}">編集</a>
